@@ -36,8 +36,8 @@
           <td><%= event['recurrence'] %></td>
           <td><%= event['type'] %></td>
           <td><%= event['isCancelled'] ? 'Cancelled' : 'Active' %></td>
-          <td><%= DateTime.parse(event['start'].values.join(' ')).strftime('%D %T %Z') %></td>
-          <td><%= DateTime.parse(event['end'].values.join(' ')).strftime('%D %T %Z') %></td>
+          <td><%= format_datetime_hash(event['start']) %></td>
+          <td><%= format_datetime_hash(event['end']) %></td>
           <td><%= event['subject'] %></td>
           <td><%= event['organizer']['emailAddress']['address'] %></td>
           <td>
@@ -47,8 +47,8 @@
               <% end %>
             </ul>
           </td>
-          <td><%= DateTime.parse(event['createdDateTime']).strftime('%D %T %Z') %></td>
-          <td><%= DateTime.parse(event['lastModifiedDateTime']).strftime('%D %T %Z') %></td>
+          <td><%= format_datetime(event['createdDateTime']) %></td>
+          <td><%= format_datetime(event['lastModifiedDateTime']) %></td>
         </tr>
       <% end %>
     </tbody>
