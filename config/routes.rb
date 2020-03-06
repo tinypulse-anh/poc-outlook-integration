@@ -11,4 +11,5 @@ Rails.application.routes.draw do
       post :change_callback
     end
   end
+  resources :change_logs, only: :index
 end

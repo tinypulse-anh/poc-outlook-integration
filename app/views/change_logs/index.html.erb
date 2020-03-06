@@ -1,0 +1,29 @@
+<h1>Changes</h1>
+
+<p>Belows are notifications coming from Microsoft Outlook if you've subscribed for change notification in <a href="<%= calendar_index_path %>">Calendar</a> page.</p>
+<p>It's worthy to note that:</p>
+<ul>
+  <li>Any change to an occurrence of a recurring event, even if it's a deletion, will produce an <strong>update</strong> event on the recurring event.</li>
+  <li>If a change is made on an occurrence and following ones of the same recurring event, another recurring event will be created and original recurring event will be updated (with new end time), resulting in a <strong>create</strong> event and an <strong>update</strong> event.</li>
+</ul>
+
+<div class="table-responsive">
+  <table class="table table-striped">
+    <thead class="thead-dark">
+      <tr class="text-nowrap">
+        <th>Timestamp</th>
+        <th>Event ID</th>
+        <th>Change Type</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @change_logs.each do |change_log| %>
+        <tr>
+          <td><%= change_log.created_at.strftime('%D %T %Z') %></td>
+          <td class="text-break"><%= change_log.event_id %></td>
+          <td><%= change_log.change_type %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
