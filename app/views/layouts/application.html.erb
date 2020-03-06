@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>PocOutlookInitegration</title>
+    <title>Sample Outlook Calendar Integration</title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
@@ -10,6 +10,11 @@
   </head>
 
   <body>
-    <%= yield %>
+    <div class="container-fluid">
+      <%= render 'common/navbar' %>
+      <%= yield %>
+    </div>
+    <%= yield :javascript %>
+    <span class="access-token" style="display: none"><%= current_user&.credentials&.fetch(:token) %></div>
   </body>
 </html>

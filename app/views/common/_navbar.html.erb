@@ -1,0 +1,35 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" href="#">Sample Outlook Calendar Integration</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-content">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbar-content">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item <%= 'active' if current_page?(controller: 'home') %>">
+        <a class="nav-link" href="<%= root_path %>">Home</a>
+      </li>
+      <% if signed_in? %>
+        <li class="nav-item <%= 'active' if current_page?(controller: 'calendar') %>">
+          <a class="nav-link" href="<%= calendar_index_path %>">Calendar</a>
+        </li>
+        <li class="nav-item <%= 'active' if current_page?(controller: 'change_logs') %>">
+          <a class="nav-link" href="<%= change_logs_path %>">Changes</a>
+        </li>
+      <% end %>
+    </ul>
+    <% if signed_in? %>
+      <div class="dropdown">
+        <a class="text-light dropdown-toggle" type="button" data-toggle="dropdown">
+          <i class="fas fa-user-circle"></i>
+        </a>
+        <div class="dropdown-menu dropdown-menu-right">
+          <span class="dropdown-item-text"><%= current_user.name %></span>
+          <span class="dropdown-item-text text-muted"><%= current_user.email %></span>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="<%= sign_out_path %>" data-method="delete">Sign out</a>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</nav>

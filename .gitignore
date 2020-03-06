@@ -33,3 +33,7 @@
 # VIm files
 *~
 *.swp
+
+# dotenv files
+.env
+.env.*

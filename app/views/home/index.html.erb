@@ -1,0 +1,14 @@
+<div class="jumbotron">
+  <h1>Sample Outlook Calendar Integration</h1>
+  <p>This is a proof-of-concept to showcase how to integrate with Microsoft Outlook Calendar to:</p>
+  <ul>
+    <li>Fetch events</li>
+    <li>Watch for event modifications</li>
+  </ul>
+  <% if signed_in? %>
+    <p>Great! You've logged in. Now go to <a href="<%= calendar_index_path %>">Calendar</a>!</p>
+  <% else %>
+    <p>Let's sign in to try!</p>
+    <a class="btn btn-primary" href="/auth/microsoft_graph" data-method="post">Sign in with Microsoft</a>
+  <% end %>
+</div>
