@@ -53,4 +53,15 @@ module CalendarHelper
   def unsubscribe_from_change_notification(subscription_id)
     graph_api_delete("/v1.0/subscriptions/#{subscription_id}")
   end
+
+  def parse_recurrence(hash)
+    return unless hash
+
+    hash.deep_symbolize_keys!
+    pattern = hash[:pattern]
+    range = hash[:range]
+
+    "RecurrenceParser::#{pattern[:type].classify}Parser".constantize
+      .new(pattern, range).to_ical
+  end
 end

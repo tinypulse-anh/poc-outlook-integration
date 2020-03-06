@@ -1,77 +1,89 @@
 <h1>Calendar</h1>
 
-<p>Belows are calendar events within a given time frame.  Each event is of one of the following type:</p>
-<ul>
-  <li><strong>singleInstance</strong>: A non-recurring event</li>
-  <li><strong>seriesMaster</strong>: The master event of a recurring series</li>
-  <li><strong>occurrence</strong>: An instance of a recurrence event</li>
-  <li><strong>exception</strong>: A modified instance of a <strong>recurrence</strong> event</li>
-</ul>
-<p>Firstly, the app calls <a href="https://docs.microsoft.com/en-us/graph/api/calendar-list-calendarview?view=graph-rest-1.0&tabs=http" target="_blank">List calendar view API</a> to get <strong>singleInstance</strong>, <strong>occurrence</strong> and <strong>exception</strong> events. Then, it fetches recurring master events via <a href="https://docs.microsoft.com/en-us/graph/api/event-get?view=graph-rest-1.0&tabs=http" target="_blank">Get event API</a> using common <strong>seriesMasterId</strong> of those events.</p>
-<p>Now try to add some events to your calendar and refresh this page!</p>
+<div class="row">
+  <div class="col">
+    <p>Belows are calendar events within a given time frame.  Each event is of one of the following type:</p>
+    <ul>
+      <li><strong>singleInstance</strong>: A non-recurring event</li>
+      <li><strong>seriesMaster</strong>: The master event of a recurring series</li>
+      <li><strong>occurrence</strong>: An instance of a recurrence event</li>
+      <li><strong>exception</strong>: A modified instance of a <strong>recurrence</strong> event</li>
+    </ul>
+    <p>Firstly, the app calls <a href="https://docs.microsoft.com/en-us/graph/api/calendar-list-calendarview?view=graph-rest-1.0&tabs=http" target="_blank">List calendar view API</a> to get <strong>singleInstance</strong>, <strong>occurrence</strong> and <strong>exception</strong> events. Then, it fetches recurring master events via <a href="https://docs.microsoft.com/en-us/graph/api/event-get?view=graph-rest-1.0&tabs=http" target="_blank">Get event API</a> using common <strong>seriesMasterId</strong> of those events.</p>
+    <p>Now try to add some events to your calendar and refresh this page!</p>
+  </div>
+</div>
 
-<div class="table-responsive">
-  <table class="table table-striped">
-    <thead class="thead-dark">
-      <tr class="text-nowrap">
-        <th>ID</th>
-        <th>Parent ID</th>
-        <th>Recurrence</th>
-        <th>Event Type</th>
-        <th>Status</th>
-        <th>Start At</th>
-        <th>End At</th>
-        <th>Subject</th>
-        <th>Organizer</th>
-        <th>Attendees</th>
-        <th>Created At</th>
-        <th>Updated At</th>
-      </tr>
-    </thead>
-    <tbody class="text-nowrap">
-      <% @events.each do |event| %>
-        <tr>
-          <td class="overflow-auto" style="max-width: 200px"><%= event['id'] %></td>
-          <td class="overflow-auto" style="max-width: 200px"><%= event['seriesMasterId'] %></td>
-          <td><%= event['recurrence'] %></td>
-          <td><%= event['type'] %></td>
-          <td><%= event['isCancelled'] ? 'Cancelled' : 'Active' %></td>
-          <td><%= format_datetime_hash(event['start']) %></td>
-          <td><%= format_datetime_hash(event['end']) %></td>
-          <td><%= event['subject'] %></td>
-          <td><%= event['organizer']['emailAddress']['address'] %></td>
-          <td>
-            <ul>
-              <% event['attendees'].each do |attendee| %>
-                <li><%= attendee['emailAddress']['address'] %></li>
-              <% end %>
-            </ul>
-          </td>
-          <td><%= format_datetime(event['createdDateTime']) %></td>
-          <td><%= format_datetime(event['lastModifiedDateTime']) %></td>
-        </tr>
+<div class="row">
+  <div class="col">
+    <div class="table-responsive">
+      <table class="table table-striped">
+        <thead class="thead-dark">
+          <tr class="text-nowrap">
+            <th>ID</th>
+            <th>Parent ID</th>
+            <th>Recurrence</th>
+            <th>Event Type</th>
+            <th>Status</th>
+            <th>Start At</th>
+            <th>End At</th>
+            <th>Subject</th>
+            <th>Organizer</th>
+            <th>Attendees</th>
+            <th>Created At</th>
+            <th>Updated At</th>
+          </tr>
+        </thead>
+        <tbody class="text-nowrap">
+          <% @events.each do |event| %>
+            <tr>
+              <td class="overflow-auto" style="max-width: 200px"><%= event['id'] %></td>
+              <td class="overflow-auto" style="max-width: 200px"><%= event['seriesMasterId'] %></td>
+              <td><%= parse_recurrence(event['recurrence']) %></td>
+              <td><%= event['type'] %></td>
+              <td><%= event['isCancelled'] ? 'Cancelled' : 'Active' %></td>
+              <td><%= format_datetime_hash(event['start']) %></td>
+              <td><%= format_datetime_hash(event['end']) %></td>
+              <td><%= event['subject'] %></td>
+              <td><%= event['organizer']['emailAddress']['address'] %></td>
+              <td>
+                <ul>
+                  <% event['attendees'].each do |attendee| %>
+                    <li><%= attendee['emailAddress']['address'] %></li>
+                  <% end %>
+                </ul>
+              </td>
+              <td><%= format_datetime(event['createdDateTime']) %></td>
+              <td><%= format_datetime(event['lastModifiedDateTime']) %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="row mt-1">
+  <div class="col">
+    <form class="form-inline">
+      <label class="mr-1">From</label>
+      <input name="from" type="date" class="form-control" required value="<%= @start_date.strftime('%F') %>" />
+      <label class="ml-2 mr-1">To</label>
+      <input name="to" type="date" class="form-control" required value="<%= @end_date.strftime('%F') %>" />
+      <button type="submit" class="btn btn-primary ml-2">Filter</button>
+    </form>
+  </div>
+
+  <div class="col">
+    <div class="float-right">
+      <% if @is_subscribed %>
+        <a class="btn btn-primary" href="<%= unsubscribe_calendar_index_path %>" data-method="post">Unsubscribe from change notification</a>
+      <% else %>
+        <a href="#" role="button" class="badge badge-secondary" data-toggle="popover" data-trigger="focus" data-html="true" title="Change notification" data-content="<p>Subscription is created via <a href='https://docs.microsoft.com/en-us/graph/api/subscription-post-subscriptions?view=graph-rest-1.0&tabs=http' target='_blank'>Create subscription API</a> with parameters:</p><ul><li><strong>resource</strong>: <code>/me/events</code></li><li><strong>changeType</strong> (events to listen): <code>created,updated,deleted</code></li></ul><p>Then, Microsoft Outlook will notify the app upon any change of events. Please note that subscription will expires in <strong>4230 minutes</strong>!">?</a>
+        <a class="btn btn-primary" href="<%= subscribe_calendar_index_path %>" data-method="post">Subscribe from change notification</a>
       <% end %>
-    </tbody>
-  </table>
-</div>
-
-<div class="float-left">
-  <form class="form-inline">
-    <label class="mr-1">From</label>
-    <input name="from" type="date" class="form-control" required value="<%= @start_date.strftime('%F') %>" />
-    <label class="ml-2 mr-1">To</label>
-    <input name="to" type="date" class="form-control" required value="<%= @end_date.strftime('%F') %>" />
-    <button type="submit" class="btn btn-primary ml-2">Filter</button>
-  </form>
-</div>
-
-<div class="float-right">
-  <% if @is_subscribed %>
-    <a class="btn btn-primary" href="<%= unsubscribe_calendar_index_path %>" data-method="post">Unsubscribe from change notification</a>
-  <% else %>
-    <a href="#" role="button" class="badge badge-secondary" data-toggle="popover" data-trigger="focus" data-html="true" title="Change notification" data-content="<p>Subscription is created via <a href='https://docs.microsoft.com/en-us/graph/api/subscription-post-subscriptions?view=graph-rest-1.0&tabs=http' target='_blank'>Create subscription API</a> with parameters:</p><ul><li><strong>resource</strong>: <code>/me/events</code></li><li><strong>changeType</strong> (events to listen): <code>created,updated,deleted</code></li></ul><p>Then, Microsoft Outlook will notify the app upon any change of events. Please note that subscription will expires in <strong>4230 minutes</strong>!">?</a>
-    <a class="btn btn-primary" href="<%= subscribe_calendar_index_path %>" data-method="post">Subscribe from change notification</a>
-  <% end %>
+    </div>
+  </div>
 </div>
 
 <% content_for :javascript do %>
