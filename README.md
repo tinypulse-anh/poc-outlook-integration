@@ -1,24 +1,29 @@
-# README
+# Prerequisites
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+- Setup an Azure AD app with `Calendars.Read` permission.
+- Set redirect URL to `http://<you server address>/auth/microsoft_graph/callback`.
+- Create a client secret for the app.
 
-Things you may want to cover:
+# Setup
 
-* Ruby version
+```
+bundle install
+bundle exec rake db:setup
+```
 
-* System dependencies
+# Environment
 
-* Configuration
+Prepare configurations and put these into `.env.development`:
 
-* Database creation
+```
+AZURE_APP_ID=<Azure AD app ID>
+AZURE_APP_SECRET=<Azure AD app client secret>
+AZURE_APP_SCOPES="openid profile email offline_access user.read calendars.read"
+CHANGE_NOTIFICATION_ENDPOINT=http://<your server address>
+```
 
-* Database initialization
+# Run
 
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+```
+bundle exec rails server -b 0.0.0.0
+```
